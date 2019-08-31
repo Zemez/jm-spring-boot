@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Home page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<nav th:include="nav"></nav>
+<div th:include="alerts"></div>
+<h3>Users:</h3>
+<table class="list">
+    <thead>
+    <tr>
+        <th th:utext="${#strings.capitalize('__#{user.id}__')}">Id</th>
+        <th th:utext="${#strings.capitalize('__#{user.username}__')}">Username</th>
+        <th th:utext="${#strings.capitalize('__#{user.password}__')}">Password</th>
+        <th th:utext="${#strings.capitalize('__#{user.enabled}__')}">Enabled</th>
+        <th th:utext="${#strings.capitalize('__#{user.account_non_expired}__')}">Non Expired</th>
+        <th th:utext="${#strings.capitalize('__#{user.credential_non_expired}__')}">Non Expired</th>
+        <th th:utext="${#strings.capitalize('__#{user.account_non_locked}__')}">Non Locked</th>
+        <th th:utext="${#strings.capitalize('__#{user.authorities}__')}">Authorities</th>
+        <th th:utext="${#strings.capitalize('__#{user.first_name}__')}">First Name</th>
+        <th th:utext="${#strings.capitalize('__#{user.last_name}__')}">Last Name</th>
+        <th th:utext="${#strings.capitalize('__#{user.email}__')}">Email</th>
+    </tr>
+    <th:block th:each="user : ${users}">
+        <tr>
+            <td><a th:href="${'/user/'+user.id}" th:text="${user.id}"></a></td>
+            <td><a th:href="${'/user/name/'+user.username}" th:text="${user.username}"></a></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.enabled}"></td>
+            <td th:text="${user.accountNonExpired}"></td>
+            <td th:text="${user.credentialsNonExpired}"></td>
+            <td th:text="${user.accountNonLocked}"></td>
+            <td th:text="${#strings.listJoin(user.authorities, ', ')}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+    </th:block>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+</html>

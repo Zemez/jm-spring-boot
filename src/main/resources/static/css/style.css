@@ -1,0 +1,47 @@
+nav {
+    padding: 5px;
+}
+
+a {
+    margin: 5px;
+}
+
+.error {
+    color: red;
+    background: lightpink;
+    border: 1px solid red;
+    padding: 10px;
+}
+
+.message {
+    color: green;
+    background: lightgreen;
+    border: 1px solid green;
+    padding: 10px;
+}
+
+button {
+    min-width: 60px;
+    padding: 2px 4px;
+}
+
+input {
+    border: 1px solid lightgray;
+    padding: 3px;
+}
+
+td {
+    vertical-align: middle;
+}
+
+th {
+    text-align: left;
+}
+
+.list, .list th, .list td {
+    color: #2b2b2b;
+    border: 1px solid #2b2b2b;
+    border-collapse: collapse;
+    padding: 10px;
+}
+

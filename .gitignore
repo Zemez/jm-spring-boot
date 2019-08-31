@@ -32,3 +32,6 @@ build/
 
 ### Credentials ###
 application.properties
+
+### tmp ###
+.cp.tmp
