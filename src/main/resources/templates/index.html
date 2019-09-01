@@ -10,6 +10,7 @@
 <nav th:include="nav"></nav>
 <div th:include="alerts"></div>
 <h3>Home:</h3>
-<p th:utext="${#strings.capitalize('__#{test}__')}">test</p>
+<!--<p th:utext="${#strings.capitalize('__#{test}__')}">test</p>-->
+<p th:if="${#request.remoteUser}" th:text="${#request.remoteUser}"></p>
 </body>
 </html>

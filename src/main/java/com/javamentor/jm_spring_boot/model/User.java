@@ -1,14 +1,22 @@
 package com.javamentor.jm_spring_boot.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User implements Generic {
+public class User implements Generic, UserDetails, CredentialsContainer {
+
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     @Id
     @Column(name = "id")
@@ -34,9 +42,9 @@ public class User implements Generic {
     private boolean accountNonLocked = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinTable(name = "user_authorities", joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_id")})
-    private Set<Authority> authorities;
+    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> roles;
 
     @Column(name = "first_name")
     private String firstName;
@@ -47,9 +55,9 @@ public class User implements Generic {
     @Column(name = "email")
     private String email;
 
-    /*****************
-     ***  methods  ***
-     *****************/
+    /************************
+     ***   Constructors   ***
+     ***********************/
     public User() {
     }
 
@@ -57,29 +65,32 @@ public class User implements Generic {
         this.username = username;
     }
 
-    public User(String username, String password, Set<Authority> authorities) {
-        this(username, password, true, true, true, true, authorities);
+    public User(String username, String password, Set<Role> roles) {
+        this(username, password, true, true, true, true, roles);
     }
 
-	public User(String username, String password, boolean enabled, boolean accountNonExpired,
-                boolean credentialsNonExpired, boolean accountNonLocked, Set<Authority> authorities){
+    public User(String username, String password, boolean enabled, boolean accountNonExpired,
+                boolean credentialsNonExpired, boolean accountNonLocked, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
         this.accountNonExpired = accountNonExpired;
         this.credentialsNonExpired = credentialsNonExpired;
         this.accountNonLocked = accountNonLocked;
-        this.authorities = authorities;
+        this.roles = roles;
     }
 
-    public User(String username, String password, boolean enabled, boolean accountNonExpired,boolean credentialsNonExpired,
-                boolean accountNonLocked, Set<Authority> authorities, String firstName, String lastName, String email) {
-        this(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+    public User(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired,
+                boolean accountNonLocked, Set<Role> roles, String firstName, String lastName, String email) {
+        this(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
+    /*******************
+     ***   Methods   ***
+     ******************/
     public Long getId() {
         return id;
     }
@@ -88,6 +99,7 @@ public class User implements Generic {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -96,6 +108,7 @@ public class User implements Generic {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -104,6 +117,7 @@ public class User implements Generic {
         this.password = password;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -112,6 +126,7 @@ public class User implements Generic {
         this.enabled = enabled;
     }
 
+    @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
@@ -120,6 +135,7 @@ public class User implements Generic {
         this.accountNonExpired = accountNonExpired;
     }
 
+    @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
@@ -128,6 +144,7 @@ public class User implements Generic {
         this.credentialsNonExpired = credentialsNonExpired;
     }
 
+    @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
@@ -136,19 +153,37 @@ public class User implements Generic {
         this.accountNonLocked = accountNonLocked;
     }
 
-    public Set<Authority> getAuthorities() {
-        if (authorities == null) {
-            authorities = new TreeSet<>();
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<String> getRoleNames() {
+        if (roles == null) return Collections.emptySet();
+        return roles.stream().map(Role::getRole).collect(Collectors.toSet());
+    }
+
+    public boolean isAdmin() {
+        return getRoleNames().contains("ADMIN");
+    }
+
+    public boolean isUser() {
+        return getRoleNames().contains("USER");
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        if (roles == null) {
+            return Collections.emptySortedSet();
         }
+        Collection<GrantedAuthority> authorities = roles.stream().map(role -> (GrantedAuthority) () -> "ROLE_" + role)
+                .collect(Collectors.toSet());
+        logger.debug("Username: {} Authorities: {}", username,
+                authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
         return authorities;
-    }
-
-    public List<String> getAuthorityNames() {
-        return getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toList());
-    }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
     }
 
     public String getFirstName() {
@@ -176,20 +211,25 @@ public class User implements Generic {
     }
 
     @Override
+    public void eraseCredentials() {
+        password = null;
+    }
+
+    @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                ", accountNonExpired=" + accountNonExpired +
-                ", credentialsNonExpired=" + credentialsNonExpired +
-                ", accountNonLocked=" + accountNonLocked +
-                ", authorities=" + authorities +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "User: {" +
+                " id: " + id +
+                ", username: '" + username + '\'' +
+                ", password: '" + password + '\'' +
+                ", enabled: " + enabled +
+                ", accountNonExpired: " + accountNonExpired +
+                ", credentialsNonExpired: " + credentialsNonExpired +
+                ", accountNonLocked: " + accountNonLocked +
+                ", roles: " + roles +
+                ", firstName: '" + firstName + '\'' +
+                ", lastName: '" + lastName + '\'' +
+                ", email: '" + email + '\'' +
+                " }";
     }
 
 }

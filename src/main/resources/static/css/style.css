@@ -1,5 +1,13 @@
 nav {
-    padding: 5px;
+    display: block;
+}
+
+nav ul {
+    display: block;
+}
+
+nav li {
+    display: inline-block;
 }
 
 a {

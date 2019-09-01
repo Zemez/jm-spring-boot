@@ -1,8 +1,8 @@
 package com.javamentor.jm_spring_boot.controller;
 
-import com.javamentor.jm_spring_boot.model.Authority;
+import com.javamentor.jm_spring_boot.model.Role;
 import com.javamentor.jm_spring_boot.model.User;
-import com.javamentor.jm_spring_boot.service.AuthorityService;
+import com.javamentor.jm_spring_boot.service.RoleService;
 import com.javamentor.jm_spring_boot.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +35,16 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private AuthorityService authorityService;
+    private RoleService roleService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView user(@ModelAttribute User user) {
+    public ModelAndView user(@ModelAttribute User user, Authentication auth) {
         if (user == null) {
-            user = new User();
+            if (auth.isAuthenticated()) {
+                user = userService.findByUsername(auth.getName());
+            } else {
+                user = new User();
+            }
         }
         return new ModelAndView("user", "user", user);
     }
@@ -53,7 +60,7 @@ public class UserController {
             }
             model.addAttribute(user);
         } catch (EmptyResultDataAccessException e) {
-            model.addAttribute(new User());
+            model.addAttribute("user", new User());
             model.addAttribute("error", USER_NOT_FOUND);
         }
         return "user";
@@ -63,7 +70,7 @@ public class UserController {
     public String readByUsername(@PathVariable(name="username") String username, ModelMap model) {
         try {
             logger.debug("Username: {}", username);
-            User user =  userService.loadUserByUsername(username);
+            User user = userService.findByUsername(username);
             logger.debug("User: {}", user);
             model.addAttribute(user);
         } catch (EmptyResultDataAccessException e) {
@@ -88,28 +95,28 @@ public class UserController {
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public String create(HttpServletRequest request, @ModelAttribute User user, RedirectAttributes attributes) {
+    public String create(@ModelAttribute User user, HttpServletRequest request, RedirectAttributes attributes) {
         logger.debug("Create: {}", user);
         String redirectUrl = "redirect:";
         try {
             user = userService.create(user);
-            if (user == null) {
-                attributes.addFlashAttribute("error", "User create failed.");
-                redirectUrl += request.getHeader("Referer");
-            } else {
+            if (user != null) {
+                authorize(user);
                 attributes.addFlashAttribute("message", "User successful created.");
                 redirectUrl += "/user/" + user.getId();
+            } else {
+                attributes.addFlashAttribute("error", "User create failed.");
+                redirectUrl += request.getHeader("Referer");
             }
         } catch (DataIntegrityViolationException e) {
             attributes.addFlashAttribute("error", "Username is already taken.");
-            attributes.addFlashAttribute("user", user);
             redirectUrl += request.getHeader("Referer");
         }
         return redirectUrl;
     }
 
     @RequestMapping(path = "/update", method = { RequestMethod.POST, RequestMethod.PUT })
-    public String update(HttpServletRequest request, @ModelAttribute User user, RedirectAttributes attributes) {
+    public String update(@ModelAttribute User user, HttpServletRequest request, RedirectAttributes attributes) {
         logger.debug("Update: {}", user);
         try {
             user = userService.update(user);
@@ -126,13 +133,22 @@ public class UserController {
     }
 
     @RequestMapping(path = "/delete", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE })
-    public String delete(HttpServletRequest request, @RequestParam Long id, RedirectAttributes attributes) {
+    public String delete(@RequestParam Long id, HttpServletRequest request, Authentication auth, RedirectAttributes attributes) {
         logger.debug("Delete: {}", id);
         String redirectUrl = "redirect:";
         try {
-            userService.deleteById(id);
-            attributes.addFlashAttribute("message", "User successful deleted.");
-            redirectUrl += "/";
+            User user = userService.findById(id);
+            if (user != null) {
+                userService.deleteById(id);
+                attributes.addFlashAttribute("message", "User successful deleted.");
+                redirectUrl += "/";
+                if (user.getUsername().equals(auth.getName())) {
+                    unAuthorize(request);
+                }
+            } else {
+                attributes.addFlashAttribute("error", "Attempt to delete a nonexistent user.");
+                redirectUrl += request.getHeader("Referer");
+            }
         } catch (InvalidDataAccessApiUsageException e) {
             attributes.addFlashAttribute("error", "Attempt to delete a nonexistent user.");
             redirectUrl += request.getHeader("Referer");
@@ -144,14 +160,25 @@ public class UserController {
         return redirectUrl;
     }
 
-    @ModelAttribute("authority_list")
-    public List<Authority> getAuthorityList() {
-        return authorityService.findAll();
+    @ModelAttribute("roleList")
+    public List<Role> getAuthorityList() {
+        return roleService.findAll();
     }
 
-    @ModelAttribute("authority_names")
+    @ModelAttribute("authorityNames")
     public List<String> authorityNames() {
-        return getAuthorityList().stream().map(Authority::getAuthority).collect(Collectors.toList());
+        return getAuthorityList().stream().map(Role::getRole).collect(Collectors.toList());
+    }
+
+    private void authorize(User user) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private void unAuthorize(HttpServletRequest request) {
+        request.getSession(false).invalidate();
+        SecurityContextHolder.getContext().setAuthentication(null);
+        SecurityContextHolder.clearContext();
     }
 
 }

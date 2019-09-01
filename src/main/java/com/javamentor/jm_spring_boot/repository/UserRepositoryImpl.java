@@ -20,7 +20,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     public User findByUsername(String username) {
         if (username == null) throw new IllegalArgumentException("Invalid null username.");
         //noinspection JpaQlInspection
-        TypedQuery<User> query = entityManager.createQuery("from User u where u.username = :username", User.class );
+        TypedQuery<User> query = entityManager.createQuery("from User where username = :username", User.class);
         query.setParameter("username", username);
         return query.getSingleResult();
     }
