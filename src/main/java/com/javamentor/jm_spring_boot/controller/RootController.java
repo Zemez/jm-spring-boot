@@ -12,7 +12,13 @@ public class RootController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String root() {
+        int a = 1 / 0;
         return "index";
     }
+
+//    @RequestMapping(path="/sign-in", method = RequestMethod.GET)
+//    public String signin() {
+//        return "sign-in";
+//    }
 
 }

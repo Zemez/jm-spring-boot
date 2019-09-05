@@ -39,7 +39,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     @Override
     @Transactional
     public User create(User user) {
-        if (user.getId() != null) user.setId(null);
+        if (user.getId() != null) {
+            user.setId(null);
+        }
         identifyAuthorities(user);
         injectBCryptPassword(user);
         return userRepository.create(user);
@@ -50,7 +52,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     public User update(User user) {
         identifyAuthorities(user);
         injectBCryptPassword(user);
-        if (userRepository.findById(user.getId()) == null) throw  new IllegalArgumentException("Invalid user.");
+        if (userRepository.findById(user.getId()) == null) {
+            throw new IllegalArgumentException("Invalid user.");
+        }
         return userRepository.update(user);
     }
 
@@ -60,9 +64,11 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User user = findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("User not found.");
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found.");
+        }
         org.springframework.security.core.userdetails.User.UserBuilder userBuilder =
                 org.springframework.security.core.userdetails.User.withUserDetails(user);
         return userBuilder.build();
@@ -72,7 +78,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private void identifyAuthorities(User user) {
         for (Role role : user.getRoles()) {
             if (role.getId() == null) {
-                String name = role.getRole();
+                String name = role.getName();
                 if (roleCache.containsKey(name)) {
                     role.setId(roleCache.get(name));
                 } else {

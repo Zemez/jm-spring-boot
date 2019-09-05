@@ -1,49 +1,47 @@
 <!DOCTYPE html>
-<!--suppress ThymeleafVariablesResolveInspection -->
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <title>Home page</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<head th:replace="fragments/common::head(~{::title},~{})">
+    <title>Users page</title>
 </head>
 <body>
-<nav th:include="nav"></nav>
-<div th:include="alerts"></div>
-<h3>Users:</h3>
-<table class="list">
-    <thead>
-    <tr>
-        <th th:utext="${#strings.capitalize('__#{user.id}__')}">Id</th>
-        <th th:utext="${#strings.capitalize('__#{user.username}__')}">Username</th>
-        <th th:utext="${#strings.capitalize('__#{user.password}__')}">Password</th>
-        <th th:utext="${#strings.capitalize('__#{user.enabled}__')}">Enabled</th>
-        <th th:utext="${#strings.capitalize('__#{user.account_non_expired}__')}">Non Expired</th>
-        <th th:utext="${#strings.capitalize('__#{user.credential_non_expired}__')}">Non Expired</th>
-        <th th:utext="${#strings.capitalize('__#{user.account_non_locked}__')}">Non Locked</th>
-        <th th:utext="${#strings.capitalize('__#{user.roles}__')}">Roles</th>
-        <th th:utext="${#strings.capitalize('__#{user.first_name}__')}">First Name</th>
-        <th th:utext="${#strings.capitalize('__#{user.last_name}__')}">Last Name</th>
-        <th th:utext="${#strings.capitalize('__#{user.email}__')}">Email</th>
-    </tr>
-    <th:block th:each="user : ${users}" th:object="${user}">
+<div th:replace="fragments/header::header"></div>
+<div th:replace="fragments/alerts::alerts"></div>
+<main class="container-fluid table-responsive">
+    <h3>Users:</h3>
+    <table class="table table-sm table-bordered table-hover">
+        <thead class="thead-dark">
         <tr>
-            <td><a th:href="*{'/user/'+id}" th:text="*{id}"></a></td>
-            <td><a th:href="*{'/user/name/'+username}" th:text="*{username}"></a></td>
-            <td th:text="*{password}"></td>
-            <td th:text="*{enabled}"></td>
-            <td th:text="*{accountNonExpired}"></td>
-            <td th:text="*{credentialsNonExpired}"></td>
-            <td th:text="*{accountNonLocked}"></td>
-            <td th:text="*{#strings.listJoin(roles, ', ')}"></td>
-            <td th:text="*{firstName}"></td>
-            <td th:text="*{lastName}"></td>
-            <td th:text="*{email}"></td>
+            <th scope="col">#</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.username}__')}">Username</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.password}__')}">Password</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.enabled}__')}">Enabled</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.account_non_expired}__')}">Non Expired</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.credential_non_expired}__')}">Non Expired</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.account_non_locked}__')}">Non Locked</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.roles}__')}">Roles</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.first_name}__')}">First Name</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.last_name}__')}">Last Name</th>
+            <th scope="col" th:utext="${#strings.capitalize('__#{user.email}__')}">Email</th>
         </tr>
-    </th:block>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <th:block th:each="user : ${users}" th:object="${user}">
+            <tr>
+                <th scope="row"><a th:href="@{{id}(id=*{id})}" th:text="*{id}"></a></th>
+                <td><a th:href="@{name/{username}(username=*{username})}" th:text="*{username}"></a></td>
+                <td th:text="*{password}"></td>
+                <td th:text="*{enabled}"></td>
+                <td th:text="*{accountNonExpired}"></td>
+                <td th:text="*{credentialsNonExpired}"></td>
+                <td th:text="*{accountNonLocked}"></td>
+                <td th:text="*{#strings.listJoin(roles, ',')}"></td>
+                <td th:text="*{firstName}"></td>
+                <td th:text="*{lastName}"></td>
+                <td th:text="*{email}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</main>
 </body>
 </html>

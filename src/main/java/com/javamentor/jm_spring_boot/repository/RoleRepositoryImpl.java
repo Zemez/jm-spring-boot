@@ -19,7 +19,7 @@ public class RoleRepositoryImpl extends AbstractRepository<Role> implements Role
     @Override
     public Role findByName(String name) {
         //noinspection JpaQlInspection
-        TypedQuery<Role> query = entityManager.createQuery("from Role where role = :name", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("from Role where name = :name", Role.class);
         query.setParameter("name", name);
         return query.getSingleResult();
     }

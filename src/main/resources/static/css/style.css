@@ -1,42 +1,46 @@
-nav {
-    display: block;
+body {
+    padding-top: 60px;
 }
 
-nav ul {
-    display: block;
-}
+/*nav {*/
+/*    display: block;*/
+/*}*/
 
-nav li {
-    display: inline-block;
-}
+/*nav ul {*/
+/*    display: block;*/
+/*}*/
 
-a {
-    margin: 5px;
-}
+/*nav li {*/
+/*    display: inline-block;*/
+/*}*/
 
-.error {
-    color: red;
-    background: lightpink;
-    border: 1px solid red;
-    padding: 10px;
-}
+/*a {*/
+/*    margin: 5px;*/
+/*}*/
 
-.message {
-    color: green;
-    background: lightgreen;
-    border: 1px solid green;
-    padding: 10px;
-}
+/*.error {*/
+/*    color: red;*/
+/*    background: lightpink;*/
+/*    border: 1px solid red;*/
+/*    padding: 10px;*/
+/*}*/
+
+/*.message {*/
+/*    color: green;*/
+/*    background: lightgreen;*/
+/*    border: 1px solid green;*/
+/*    padding: 10px;*/
+/*}*/
 
 button {
     min-width: 60px;
-    padding: 2px 4px;
+    /*padding: 2px 4px;*/
 }
 
-input {
-    border: 1px solid lightgray;
-    padding: 3px;
-}
+/*input {*/
+/*    border: 1px solid lightgray;*/
+/*    padding: 3px;*/
+/*}*/
 
 td {
     vertical-align: middle;
@@ -52,4 +56,3 @@ th {
     border-collapse: collapse;
     padding: 10px;
 }
-

@@ -162,8 +162,10 @@ public class User implements Generic, UserDetails, CredentialsContainer {
     }
 
     public Set<String> getRoleNames() {
-        if (roles == null) return Collections.emptySet();
-        return roles.stream().map(Role::getRole).collect(Collectors.toSet());
+        if (roles == null) {
+            return Collections.emptySet();
+        }
+        return roles.stream().map(Role::getName).collect(Collectors.toSet());
     }
 
     public boolean isAdmin() {

@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -87,7 +86,7 @@ public class UserController {
             logger.debug("Users: {}", users);
             model.addAttribute("users", users);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn(e.getMessage());
             model.addAttribute("users", Collections.EMPTY_LIST);
             model.addAttribute("error", e.getMessage());
         }
@@ -103,7 +102,11 @@ public class UserController {
             if (user != null) {
                 authorize(user);
                 attributes.addFlashAttribute("message", "User successful created.");
-                redirectUrl += "/user/" + user.getId();
+                if (user.isUser()) {
+                    redirectUrl += "/user/" + user.getId();
+                } else {
+                    redirectUrl += "/";
+                }
             } else {
                 attributes.addFlashAttribute("error", "User create failed.");
                 redirectUrl += request.getHeader("Referer");
@@ -161,13 +164,8 @@ public class UserController {
     }
 
     @ModelAttribute("roleList")
-    public List<Role> getAuthorityList() {
+    public List<Role> getRoleList() {
         return roleService.findAll();
-    }
-
-    @ModelAttribute("authorityNames")
-    public List<String> authorityNames() {
-        return getAuthorityList().stream().map(Role::getRole).collect(Collectors.toList());
     }
 
     private void authorize(User user) {

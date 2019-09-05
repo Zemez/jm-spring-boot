@@ -16,19 +16,19 @@ public class Role implements Generic, Comparable, GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role", length = 15, unique = true, nullable = false, updatable = false)
-    private String role;
+    @Column(name = "name", length = 15, unique = true, nullable = false, updatable = false)
+    private String name;
 
     public Role() {
     }
 
-    public Role(String role) {
-        Assert.hasText(role, "A granted authority textual representation is required");
-        this.role = role;
+    public Role(String name) {
+        Assert.hasText(name, "A granted authority textual representation is required");
+        this.name = name;
     }
 
-    public Role(Long id, String role) {
-        this(role);
+    public Role(Long id, String name) {
+        this(name);
         this.id = id;
     }
 
@@ -40,17 +40,17 @@ public class Role implements Generic, Comparable, GrantedAuthority {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String getAuthority() {
-        return role;
+        return name;
     }
 
     @Override
@@ -59,26 +59,26 @@ public class Role implements Generic, Comparable, GrantedAuthority {
             return true;
         }
         if (obj instanceof Role) {
-            return role.equals(((Role) obj).role);
+            return name.equals(((Role) obj).name);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return role.hashCode();
+        return name.hashCode();
     }
 
     @Override
     public String toString() {
-        return role;
+        return name;
     }
 
     @Override
     public int compareTo(Object obj) {
         int result;
         if (obj instanceof Role) {
-            result = Objects.compare(role, ((Role) obj).getRole(), Comparator.comparing(String::toLowerCase));
+            result = Objects.compare(name, ((Role) obj).getName(), Comparator.comparing(String::toLowerCase));
         } else {
             result = Objects.compare(this, obj, Comparator.comparing(Objects::toString));
         }

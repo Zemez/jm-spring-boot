@@ -20,7 +20,9 @@ public class AbstractService<T extends Generic> implements GenericService<T> {
     @Override
     @Transactional
     public T create(T entity) {
-        if (entity.getId() != null) entity.setId(null);
+        if (entity.getId() != null) {
+            entity.setId(null);
+        }
         return repository.create(entity);
     }
 

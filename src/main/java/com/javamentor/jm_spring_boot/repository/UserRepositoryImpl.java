@@ -4,6 +4,7 @@ import com.javamentor.jm_spring_boot.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 @Repository("userRepository")
@@ -18,11 +19,17 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
 
     @Override
     public User findByUsername(String username) {
-        if (username == null) throw new IllegalArgumentException("Invalid null username.");
+        if (username == null) {
+            throw new IllegalArgumentException("Invalid null username.");
+        }
         //noinspection JpaQlInspection
         TypedQuery<User> query = entityManager.createQuery("from User where username = :username", User.class);
         query.setParameter("username", username);
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }

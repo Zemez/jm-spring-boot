@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
+<head th:replace="fragments/common::head(~{::title},~{})">
     <title>Home page</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<nav th:include="nav"></nav>
-<div th:include="alerts"></div>
-<h3>Home:</h3>
-<!--<p th:utext="${#strings.capitalize('__#{test}__')}">test</p>-->
-<p th:if="${#request.remoteUser}" th:text="${#request.remoteUser}"></p>
+<div th:replace="fragments/header::header"></div>
+<div th:replace="fragments/alerts::alerts"></div>
+<main class="container-fluid">
+    <h3>Home:</h3>
+    <p>Welcome, <em
+            th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!</p>
+    <p th:inline="text">Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) :
+        'Anonymous'}]]!</p>
+</main>
 </body>
 </html>
