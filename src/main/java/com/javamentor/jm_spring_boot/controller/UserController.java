@@ -100,7 +100,7 @@ public class UserController {
         try {
             user = userService.create(user);
             if (user != null) {
-                authorize(user);
+                authorize(request, user);
                 attributes.addFlashAttribute("message", "User successful created.");
                 if (user.isUser()) {
                     redirectUrl += "/user/" + user.getId();
@@ -168,12 +168,14 @@ public class UserController {
         return roleService.findAll();
     }
 
-    private void authorize(User user) {
+    private void authorize(HttpServletRequest request, User user) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        request.getSession().setAttribute("current_user", user);
     }
 
     private void unAuthorize(HttpServletRequest request) {
+        request.getSession().removeAttribute("current_user");
         request.getSession(false).invalidate();
         SecurityContextHolder.getContext().setAuthentication(null);
         SecurityContextHolder.clearContext();

@@ -1,58 +1,32 @@
 body {
-    padding-top: 60px;
+    padding-top: 56px;
+    background-color: rgb(245, 245, 245);
 }
 
-/*nav {*/
-/*    display: block;*/
-/*}*/
-
-/*nav ul {*/
-/*    display: block;*/
-/*}*/
-
-/*nav li {*/
-/*    display: inline-block;*/
-/*}*/
-
-/*a {*/
-/*    margin: 5px;*/
-/*}*/
-
-/*.error {*/
-/*    color: red;*/
-/*    background: lightpink;*/
-/*    border: 1px solid red;*/
-/*    padding: 10px;*/
-/*}*/
-
-/*.message {*/
-/*    color: green;*/
-/*    background: lightgreen;*/
-/*    border: 1px solid green;*/
-/*    padding: 10px;*/
-/*}*/
+input {
+    margin: 5px 0;
+}
 
 button {
     min-width: 60px;
-    /*padding: 2px 4px;*/
 }
 
-/*input {*/
-/*    border: 1px solid lightgray;*/
-/*    padding: 3px;*/
-/*}*/
-
-td {
-    vertical-align: middle;
+form {
+    padding: 20px;
 }
 
-th {
-    text-align: left;
+h3 {
+    margin-top: 20px;
 }
 
-.list, .list th, .list td {
-    color: #2b2b2b;
-    border: 1px solid #2b2b2b;
-    border-collapse: collapse;
-    padding: 10px;
+.table-user th, .table-user td, .table-user label {
+    vertical-align: baseline;
+}
+
+.list tr:hover {
+    cursor: pointer;
+}
+
+.error .table {
+    margin-bottom: 0;
 }

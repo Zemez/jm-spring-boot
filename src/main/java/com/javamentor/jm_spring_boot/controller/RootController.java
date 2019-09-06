@@ -12,7 +12,6 @@ public class RootController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String root() {
-        int a = 1 / 0;
         return "index";
     }
 

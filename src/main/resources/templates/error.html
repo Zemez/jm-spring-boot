@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/common::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{})">
     <title>Error page</title>
 </head>
 <body>
-<div th:replace="fragments/header::header"></div>
-<!--<div th:replace="fragments/alerts::alerts"></div>-->
+<div th:replace="layout::header"></div>
+<!--<div th:replace="layout::alerts"></div>-->
 <main class="container-fluid">
-    <div class="container alert alert-danger">
+    <div class="error alert alert-danger">
         <h3 class="alert-heading">Error!</h3>
         <table class="table table-sm table-borderless">
             <tr th:if="${status}">

@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="fragments/common::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{})">
     <title>Home page</title>
 </head>
 <body>
-<div th:replace="fragments/header::header"></div>
-<div th:replace="fragments/alerts::alerts"></div>
+<div th:replace="layout::header"></div>
+<div th:replace="layout::alerts"></div>
 <main class="container-fluid">
-    <h3>Home:</h3>
-    <p>Welcome, <em
-            th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!</p>
-    <p th:inline="text">Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) :
-        'Anonymous'}]]!</p>
+    <div class="container">
+        <h3>Home</h3>
+        <p>Welcome, <em
+                th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!
+        </p>
+        <p th:inline="text">Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) :
+            'Anonymous'}]]!</p>
+    </div>
 </main>
 </body>
 </html>
