@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="layout::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{},~{})">
     <title>Home page</title>
 </head>
 <body>
@@ -12,8 +12,7 @@
         <p>Welcome, <em
                 th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!
         </p>
-        <p th:inline="text">Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) :
-            'Anonymous'}]]!</p>
+        <p>Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}]]!</p>
     </div>
 </main>
 </body>

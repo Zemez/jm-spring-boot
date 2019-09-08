@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:fragment="head(title,links)">
+<head th:fragment="head(title,links,scripts)">
     <title th:replace="${title}">Some page</title>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -9,12 +9,14 @@
           rel="stylesheet" th:href="@{//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
     <th:block th:replace="${links}"/>
-    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            th:src="@{//code.jquery.com/jquery-3.3.1.slim.min.js}"></script>
-    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            th:src="@{//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"></script>
+    <script th:src="@{//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+    <!--    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
+    <!--            th:src="@{//code.jquery.com/jquery-3.3.1.slim.min.js}"></script>-->
+    <!--    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"-->
+    <!--            th:src="@{//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"></script>-->
     <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             th:src="@{//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <th:block th:replace="${scripts}"/>
 </head>
 
 <header th:fragment="header">
@@ -27,15 +29,14 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/user/all}">Users</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin}">Admin</a></li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item" th:unless="${#request.remoteUser}"><a class="nav-link"
                                                                            th:href="@{/auth/sign-up}">Sign-up</a></li>
                 <li class="nav-item" th:unless="${#request.remoteUser}"><a class="nav-link"
                                                                            th:href="@{/auth/sign-in}">Sign-in</a></li>
-                <li class="nav-item" th:if="${#request.remoteUser}"><a class="nav-link"
-                                                                       th:href="@{/user/name/{username}(username=${#request.remoteUser})}"
+                <li class="nav-item" th:if="${#request.remoteUser}"><a class="nav-link" th:href="@{/user}"
                                                                        th:text="${#strings.capitalize(#request.remoteUser)}"></a>
                 </li>
                 <li class="nav-item" th:if="${#request.remoteUser}"><a class="nav-link" th:href="@{/auth/sign-out}">Sign-out</a>

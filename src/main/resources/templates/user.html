@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="layout::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{},~{})">
     <title>User page</title>
 </head>
 <body>
@@ -11,91 +11,102 @@
         <div class="col-auto">
             <h3 class="text-center" th:inline="text">User [[${user.id == null ? 'sign up' :
                 #strings.capitalize(user.username)}]]</h3>
-            <form action="#" th:action="@{/user/#}" th:method="post" th:object="${user}">
-                <table class="table table-sm table-borderless table-user">
-                    <tr th:if="*{id}">
-                        <th><label th:for="id" th:text="${#strings.capitalize('__#{user.id}__')}+':'"></label></th>
-                        <td><input th:field="*{id}" th:readonly="*{id != null}"/></td>
-                    </tr>
-                    <tr>
-                        <th><label th:for="username"
-                                   th:text="${#strings.capitalize('__#{user.username}__')}+':'"></label>
-                        </th>
-                        <td><input th:field="*{username}" th:readonly="*{id != null}"/></td>
-                    </tr>
-                    <tr>
-                        <th><label th:for="password"
-                                   th:text="${#strings.capitalize('__#{user.password}__')}+':'"></label>
-                        </th>
-                        <td><input th:field="*{password}"/></td>
-                    </tr>
-                    <th:block th:if="${session.current_user != null && session.current_user.isAdmin()}">
-                        <tr>
-                            <th><label th:for="enabled"
-                                       th:text="${#strings.capitalize('__#{user.enabled}__')}+':'"></label>
-                            </th>
-                            <td><input th:field="*{enabled}" type="checkbox"/></td>
-                        </tr>
-                        <tr>
-                            <th><label th:for="accountNonExpired"
-                                       th:text="${#strings.capitalize('__#{user.account_non_expired}__')}+':'"></label>
-                            </th>
-                            <td><input th:field="*{accountNonExpired}" type="checkbox"/></td>
-                        </tr>
-                        <tr>
-                            <th><label th:for="credentialsNonExpired"
-                                       th:text="${#strings.capitalize('__#{user.credential_non_expired}__')+':'}"></label>
-                            </th>
-                            <td><input th:field="*{credentialsNonExpired}" type="checkbox"/></td>
-                        </tr>
-                        <tr>
-                            <th><label th:for="accountNonLocked"
-                                       th:text="${#strings.capitalize('__#{user.account_non_locked}__')}+':'"></label>
-                            </th>
-                            <td><input th:field="*{accountNonLocked}" type="checkbox"/></td>
-                        </tr>
-                        <tr>
-                            <th><label th:for="roles" th:text="${#strings.capitalize('__#{user.roles}__')}+':'"></label>
-                            </th>
-                            <td>
-                                <th:block th:each="role,status : ${roleList}">
-                                    <input th:field="*{roles}" th:value="${role}" type="checkbox"/>
-                                    <label th:for="${'role'+status.count}" th:text="${role}"></label>
-                                </th:block>
-                            </td>
-                        </tr>
-                    </th:block>
-                    <tr>
-                        <th><label th:for="firstName"
-                                   th:text="${#strings.capitalize('__#{user.first_name}__')}+':'"></label>
-                        </th>
-                        <td><input onclick="return false" th:field="*{firstName}"/></td>
-                    </tr>
-                    <tr>
-                        <th><label th:for="lastName"
-                                   th:text="${#strings.capitalize('__#{user.last_name}__')}+':'"></label>
-                        </th>
-                        <td><input onclick="return false" th:field="*{lastName}"/></td>
-                    </tr>
-                    <tr>
-                        <th><label th:for="email" th:text="${#strings.capitalize('__#{user.email}__')}+':'"></label>
-                        </th>
-                        <td><input onclick="return false" th:field="*{email}"/></td>
-                    </tr>
-                </table>
-                <div class="text-center">
-                    <button class="btn btn-sm btn-outline-primary" th:formaction="@{/auth/sign-up}" th:type="submit"
-                            th:unless="*{id}">sign-up
-                    </button>
-                    <button class="btn btn-sm btn-outline-primary" th:formaction="@{/user/update}" th:if="*{id}"
-                            th:type="submit">update
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" th:formaction="@{/user/delete}" th:if="*{id}"
-                            th:type="submit">delete
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary" th:type="reset">reset</button>
+            <div th:fragment="user-form"
+                 th:with="is_admin=${session.current_user != null && session.current_user.isAdmin()}">
+                <div th:with="url=${is_admin} ? '/admin' : '/user'">
+                    <form action="#" th:action="@{${url+'/#'}}" th:method="post" th:object="${user}">
+                        <table class="table table-sm table-borderless table-user">
+                            <tr th:if="*{id}">
+                                <th><label th:for="id" th:text="${#strings.capitalize('__#{user.id}__')}+':'"></label>
+                                </th>
+                                <td><input th:field="*{id}" th:readonly="*{id != null}"/></td>
+                            </tr>
+                            <tr>
+                                <th><label th:for="username"
+                                           th:text="${#strings.capitalize('__#{user.username}__')}+':'"></label>
+                                </th>
+                                <td><input th:field="*{username}" th:readonly="*{id != null}"/></td>
+                            </tr>
+                            <tr>
+                                <th><label th:for="password"
+                                           th:text="${#strings.capitalize('__#{user.password}__')}+':'"></label>
+                                </th>
+                                <td><input th:field="*{password}"/></td>
+                            </tr>
+                            <th:block th:if="${is_admin}">
+                                <tr>
+                                    <th><label th:for="enabled"
+                                               th:text="${#strings.capitalize('__#{user.enabled}__')}+':'"></label>
+                                    </th>
+                                    <td><input th:field="*{enabled}" type="checkbox"/></td>
+                                </tr>
+                                <tr>
+                                    <th><label th:for="accountNonExpired"
+                                               th:text="${#strings.capitalize('__#{user.account_non_expired}__')}+':'"></label>
+                                    </th>
+                                    <td><input th:field="*{accountNonExpired}" type="checkbox"/></td>
+                                </tr>
+                                <tr>
+                                    <th><label th:for="credentialsNonExpired"
+                                               th:text="${#strings.capitalize('__#{user.credential_non_expired}__')+':'}"></label>
+                                    </th>
+                                    <td><input th:field="*{credentialsNonExpired}" type="checkbox"/></td>
+                                </tr>
+                                <tr>
+                                    <th><label th:for="accountNonLocked"
+                                               th:text="${#strings.capitalize('__#{user.account_non_locked}__')}+':'"></label>
+                                    </th>
+                                    <td><input th:field="*{accountNonLocked}" type="checkbox"/></td>
+                                </tr>
+                                <tr>
+                                    <th><label th:for="roles"
+                                               th:text="${#strings.capitalize('__#{user.roles}__')}+':'"></label>
+                                    </th>
+                                    <td>
+                                        <th:block th:each="role,status : ${roleList}">
+                                            <input th:field="*{roles}" th:value="${role}" type="checkbox"/>
+                                            <label th:for="${'role'+status.count}" th:text="${role}"></label>
+                                        </th:block>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            <tr>
+                                <th><label th:for="firstName"
+                                           th:text="${#strings.capitalize('__#{user.first_name}__')}+':'"></label>
+                                </th>
+                                <td><input onclick="return false" th:field="*{firstName}"/></td>
+                            </tr>
+                            <tr>
+                                <th><label th:for="lastName"
+                                           th:text="${#strings.capitalize('__#{user.last_name}__')}+':'"></label>
+                                </th>
+                                <td><input onclick="return false" th:field="*{lastName}"/></td>
+                            </tr>
+                            <tr>
+                                <th><label th:for="email"
+                                           th:text="${#strings.capitalize('__#{user.email}__')}+':'"></label>
+                                </th>
+                                <td><input onclick="return false" th:field="*{email}"/></td>
+                            </tr>
+                        </table>
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    th:formaction="@{${is_admin ? '/admin/create' : '/auth/sign-up'}}" th:type="submit"
+                                    th:unless="*{id}">sign-up
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" th:formaction="@{${url+'/update'}}"
+                                    th:if="*{id}"
+                                    th:type="submit">update
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" th:formaction="@{${url+'/delete'}}"
+                                    th:if="*{id}"
+                                    th:type="submit">delete
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" th:type="reset">reset</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </main>

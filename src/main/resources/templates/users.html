@@ -1,41 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="layout::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{},~{::script})">
     <title>Users page</title>
+    <script th:src="@{/js/user.js}"></script>
 </head>
 <body>
 <div th:replace="layout::header"></div>
 <div th:replace="layout::alerts"></div>
-<main class="container-fluid table-responsive">
+<main class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-auto">
+        <div class="col-lg">
             <h3 class="text-center">Users</h3>
-            <table class="table table-sm table-bordered table-hover list">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.username}__')}">Username</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.enabled}__')}">Enabled</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.roles}__')}">Roles</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.first_name}__')}">First Name</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.last_name}__')}">Last Name</th>
-                    <th scope="col" th:utext="${#strings.capitalize('__#{user.email}__')}">Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="user : ${users}" th:object="${user}">
+            <div class=" table-responsive" th:fragment="users">
+                <table class="table table-sm table-bordered table-hover list">
+                    <thead class="thead-dark">
                     <tr>
-                        <th scope="row"><a th:href="@{{id}(id=*{id})}" th:text="*{id}"></a></th>
-                        <td><a th:href="@{name/{username}(username=*{username})}" th:text="*{username}"></a></td>
-                        <td th:text="*{enabled}"></td>
-                        <td th:text="*{#strings.listJoin(roles, ',')}"></td>
-                        <td th:text="*{firstName}"></td>
-                        <td th:text="*{lastName}"></td>
-                        <td th:text="*{email}"></td>
+                        <th scope="col">#</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.username}__')}">Username</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.enabled}__')}">Enabled</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.roles}__')}">Roles</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.first_name}__')}">First Name</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.last_name}__')}">Last Name</th>
+                        <th scope="col" th:utext="${#strings.capitalize('__#{user.email}__')}">Email</th>
                     </tr>
-                </th:block>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="user : ${users}" th:object="${user}">
+                        <tr th:class="user" th:id="*{id}">
+                            <th scope="row" th:text="*{id}"></th>
+                            <td th:text="*{username}"></td>
+                            <td th:text="*{enabled}"></td>
+                            <td th:text="*{#strings.listJoin(roles, ',')}"></td>
+                            <td th:text="*{firstName}"></td>
+                            <td th:text="*{lastName}"></td>
+                            <td th:text="*{email}"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="modal-label" class="modal fade" id="user-modal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">User edit</h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="user-modal-body">
+                    ...
+                </div>
+                <!--                <div class="modal-footer">-->
+                <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+                <!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <!--                </div>-->
+            </div>
         </div>
     </div>
 </main>

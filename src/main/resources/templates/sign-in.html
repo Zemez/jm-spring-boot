@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout::head(~{::title},~{})">
+<head th:replace="layout::head(~{::title},~{},~{})">
     <title>Sign-in page</title>
 </head>
 <body>
@@ -20,7 +20,8 @@
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
             </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Sign in</button>
+            <button class="btn btn-lg btn-outline-secondary btn-block" type="reset">Reset</button>
         </form>
     </div>
 </main>

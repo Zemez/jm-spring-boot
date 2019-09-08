@@ -15,9 +15,4 @@ public class RootController {
         return "index";
     }
 
-//    @RequestMapping(path="/sign-in", method = RequestMethod.GET)
-//    public String signin() {
-//        return "sign-in";
-//    }
-
 }
