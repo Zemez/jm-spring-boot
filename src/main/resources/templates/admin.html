@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout::head(~{::title},~{},~{})">
+<head th:replace="layout::head(~{::title},~{},~{::script})">
     <title>Admin page</title>
+    <script th:src="@{/js/admin.js}"></script>
 </head>
 <body>
 <div th:replace="layout::header"></div>
@@ -18,8 +19,8 @@
         </li>
     </ul>
     <div class="tab-content" id="admin-tab-content">
-        <div aria-labelledby="users-tab" class="tab-pane fade show active" id="users" role="tabpanel">...</div>
-        <div aria-labelledby="profile-tab" class="tab-pane fade" id="create" role="tabpanel">...</div>
+        <div aria-labelledby="users-tab" class="tab-pane fade show active" id="users" role="tabpanel">Users...</div>
+        <div aria-labelledby="profile-tab" class="tab-pane fade" id="create" role="tabpanel">Create...</div>
     </div>
 </main>
 </body>

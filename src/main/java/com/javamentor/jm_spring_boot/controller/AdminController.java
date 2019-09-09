@@ -35,7 +35,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String admin() {
-        return "redirect:/admin/all";
+        return "admin";
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -66,7 +66,7 @@ public class AdminController {
             model.addAttribute(new User());
             model.addAttribute("error", USER_NOT_FOUND);
         }
-        return "user";
+        return "user::user-form";
     }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
@@ -80,12 +80,12 @@ public class AdminController {
             model.addAttribute("users", Collections.EMPTY_LIST);
             model.addAttribute("error", e.getMessage());
         }
-        return "users";
+        return "users::users";
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.GET)
     public String create(@ModelAttribute User user) {
-        return "user";
+        return "user::user-form";
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
