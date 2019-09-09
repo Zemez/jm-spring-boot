@@ -4,16 +4,16 @@
     <title>Home page</title>
 </head>
 <body>
-<div th:replace="layout::header"></div>
-<div th:replace="layout::alerts"></div>
-<main class="container-fluid">
-    <div class="container">
-        <h3>Home</h3>
-        <p>Welcome, <em
-                th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!
+<div th:replace="layout::navbar('home')"></div>
+<div class="row container-fluid">
+    <div th:replace="layout::menu('user')"></div>
+    <main class="col">
+        <div th:replace="layout::alerts"></div>
+        <h3 th:text="${#request.remoteUser != null} ? 'User page' : 'Home page'">Home page</h3>
+        <p>Welcome,
+            <em th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!
         </p>
-        <p>Welcome, [[${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}]]!</p>
-    </div>
-</main>
+    </main>
+</div>
 </body>
 </html>

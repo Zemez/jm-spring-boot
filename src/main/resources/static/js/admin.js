@@ -5,6 +5,8 @@ $(document).ready(function () {
             event.preventDefault();
             var href = '/admin/' + $(this).attr('id');
             $.get(href, function (user) {
+                var username = $(user).find('#username').val();
+                $('#user-modal-title').text('Edit user ' + username);
                 $('#user-modal-body').html(user);
             });
             $('#user-modal').modal();

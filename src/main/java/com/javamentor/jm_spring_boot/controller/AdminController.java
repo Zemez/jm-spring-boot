@@ -73,7 +73,7 @@ public class AdminController {
     public String readAll(ModelMap model) {
         try {
             List<User> users = userService.findAll();
-            logger.debug("Users: {}", users);
+//            logger.debug("Users: {}", users);
             model.addAttribute("users", users);
         } catch (Exception e) {
             logger.warn(e.getMessage());

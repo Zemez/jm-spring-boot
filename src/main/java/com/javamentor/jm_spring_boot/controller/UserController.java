@@ -11,7 +11,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,16 +33,19 @@ public class UserController {
     private RoleService roleService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String user(ModelMap model, Authentication auth) {
-        User user;
-        if (auth.isAuthenticated()) {
-                user = userService.findByUsername(auth.getName());
-            } else {
-                user = new User();
-            }
-        model.addAttribute("user", user);
-        return "user";
+    public String user() {
+        return "index";
     }
+//    public String user(ModelMap model, Authentication auth) {
+//        User user;
+//        if (auth.isAuthenticated()) {
+//                user = userService.findByUsername(auth.getName());
+//            } else {
+//                user = new User();
+//            }
+//        model.addAttribute("user", user);
+//        return "user";
+//    }
 
     @RequestMapping(path = "/update", method = { RequestMethod.POST, RequestMethod.PUT })
     public String update(HttpServletRequest request, Authentication auth, RedirectAttributes attributes) {

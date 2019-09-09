@@ -1,5 +1,6 @@
 package com.javamentor.jm_spring_boot.handler;
 
+import com.javamentor.jm_spring_boot.model.User;
 import com.javamentor.jm_spring_boot.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,22 +51,19 @@ public class AuthenticationSuccessHandlerImpl extends AbstractAuthenticationTarg
         }
         request.getSession().setAttribute("message", msg);
 
-        request.getSession().setAttribute("current_user", userService.findByUsername(auth.getName()));
+        User user = userService.findByUsername(auth.getName());
+        request.getSession().setAttribute("current_user", user);
         logger.debug("current_user: {}", request.getSession().getAttribute("current_user"));
-
-        //        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-//        logger.info("Roles: " + authorities);
 
         if (!response.isCommitted()) {
             String targetUrl;
-//            if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-//                response.sendRedirect("/admin");
-//            } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
-//                response.sendRedirect("/user");
-//            } else {
-//                response.sendRedirect("/");
-//            }
-            targetUrl = determineTargetUrl(request, response);
+            if (user.isAdmin()) {
+                targetUrl = "/admin";
+            } else if (user.isUser()) {
+                targetUrl = "/user";
+            } else {
+                targetUrl = determineTargetUrl(request, response);
+            }
             redirectStrategy.sendRedirect(request, response, targetUrl);
         }
     }

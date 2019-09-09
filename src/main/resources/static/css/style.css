@@ -25,13 +25,17 @@ button {
 
 form > div > label {
     font-weight: 600;
-    text-align: right;
+    /*text-align: right;*/
     text-wrap: avoid;
 }
 
 .form-signin input {
     margin: 0.2rem 0;
 }
+
+/*.user-row {*/
+/*    margin: 0;*/
+/*}*/
 
 .user-form-group {
     margin-bottom: 0.2rem;
