@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User implements Generic, UserDetails, CredentialsContainer {
+public class User implements UserDetails, CredentialsContainer {
 
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 

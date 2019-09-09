@@ -14,7 +14,7 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
     private final RoleRepository roleRepository;
 
     public RoleServiceImpl(RoleRepository roleRepository) {
-        super(Role.class, roleRepository);
+        super(roleRepository);
         this.roleRepository = roleRepository;
     }
 

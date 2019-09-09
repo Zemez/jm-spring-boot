@@ -85,7 +85,7 @@ public class AdminController {
 
     @RequestMapping(path = "/create", method = RequestMethod.GET)
     public String create(@ModelAttribute User user) {
-        return "user::user-form";
+        return "user::user-form-full";
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)

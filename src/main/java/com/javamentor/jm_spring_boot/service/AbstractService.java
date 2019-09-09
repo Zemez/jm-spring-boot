@@ -1,28 +1,22 @@
 package com.javamentor.jm_spring_boot.service;
 
-import com.javamentor.jm_spring_boot.model.Generic;
 import com.javamentor.jm_spring_boot.repository.GenericRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Transactional(readOnly = true)
-public class AbstractService<T extends Generic> implements GenericService<T> {
+public class AbstractService<T> implements GenericService<T> {
 
-    private final Class<T> entityClass;
     private final GenericRepository<T> repository;
 
-    public AbstractService(Class<T> entityClass, GenericRepository<T> repository) {
-        this.entityClass = entityClass;
+    public AbstractService(GenericRepository<T> repository) {
         this.repository = repository;
     }
 
     @Override
     @Transactional
     public T create(T entity) {
-        if (entity.getId() != null) {
-            entity.setId(null);
-        }
         return repository.create(entity);
     }
 
@@ -39,9 +33,6 @@ public class AbstractService<T extends Generic> implements GenericService<T> {
     @Override
     @Transactional
     public T update(T entity) {
-        if (repository.findById(entity.getId()) == null) {
-            throw new IllegalArgumentException(String.format("Invalid %s.", entityClass.getName()));
-        }
         return repository.update(entity);
     }
 

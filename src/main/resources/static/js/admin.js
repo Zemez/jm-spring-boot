@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.get('/admin/all', function (users) {
-        $('#users').html(users);
+        $('#users-content').html(users);
         $('.user').on('click', function (event) {
             event.preventDefault();
             var href = '/admin/' + $(this).attr('id');
@@ -11,6 +11,6 @@ $(document).ready(function () {
         })
     });
     $.get('/admin/create', function (user) {
-        $('#create').html(user);
+        $('#create-content').html(user);
     });
 });

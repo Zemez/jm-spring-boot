@@ -3,30 +3,48 @@ body {
     background-color: rgb(245, 245, 245);
 }
 
-input {
-    margin: 5px 0;
-}
-
-button {
-    min-width: 60px;
-}
-
-form {
-    padding: 20px;
-}
-
 h3 {
-    margin-top: 20px;
+    margin-top: 1rem;
 }
 
-.table-user th, .table-user td, .table-user label {
-    vertical-align: baseline;
+h6 {
+    font-weight: 600;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background-color: lightgrey;
+}
+button {
+    min-width: 80px;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
 }
 
-.list tr:hover {
+.buttons {
+    margin: 1rem;
+}
+
+form > div > label {
+    font-weight: 600;
+    text-align: right;
+    text-wrap: avoid;
+}
+
+.form-signin input {
+    margin: 0.2rem 0;
+}
+
+.user-form-group {
+    margin-bottom: 0.2rem;
+}
+
+.users-table tr:hover {
     cursor: pointer;
 }
 
-.error .table {
+.error .table, .users-table {
     margin-bottom: 0;
+}
+
+#create-content {
+    margin-top: 1rem;
 }

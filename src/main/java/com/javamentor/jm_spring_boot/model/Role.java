@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role implements Generic, Comparable, GrantedAuthority {
+public class Role implements GrantedAuthority, Comparable {
 
     @Id
     @Column(name = "id")
