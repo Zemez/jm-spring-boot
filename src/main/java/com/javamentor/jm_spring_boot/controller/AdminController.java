@@ -34,7 +34,9 @@ public class AdminController {
     private RoleService roleService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String admin() {
+    public String admin(ModelMap model) {
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("user", new User());
         return "admin";
     }
 

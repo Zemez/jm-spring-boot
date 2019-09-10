@@ -13,6 +13,11 @@ h6 {
     padding: 0.5rem 1rem;
     background-color: lightgrey;
 }
+
+h6.border-bottom {
+    margin-bottom: 1rem;
+}
+
 button {
     min-width: 80px;
     margin-left: 0.2rem;

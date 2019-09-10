@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout::head(~{::title},~{},~{::script})">
     <title>Admin page</title>
-    <script th:src="@{/js/admin.js}"></script>
+    <script th:src="@{/js/user.js}"></script>
 </head>
 <body>
 <div th:replace="layout::navbar('admin')"></div>
@@ -22,14 +22,15 @@
         </li>
     </ul>
     <div class="tab-content" id="admin-tab-content">
-        <div aria-labelledby="users-tab" class="tab-pane fade show active" id="users" role="tabpanel">
+        <div aria-labelledby="users-tab" class="tab-pane border-left border-right border-bottom fade show active"
+             id="users" role="tabpanel">
             <h6 class="border-left border-right">All users</h6>
-            <div id="users-content">Users...</div>
+            <div id="users-content" th:replace="users::users">Users...</div>
         </div>
-        <div aria-labelledby="create-tab" class="tab-pane fade border-left border-right border-bottom" id="create"
+        <div aria-labelledby="create-tab" class="tab-pane border-left border-right border-bottom fade" id="create"
              role="tabpanel">
             <h6 class="border-bottom">Add new user</h6>
-            <div id="create-content">Create...</div>
+            <div id="create-content" th:replace="user::user-form-full">Create...</div>
         </div>
     </div>
 </main>
