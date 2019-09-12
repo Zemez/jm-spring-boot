@@ -18,7 +18,7 @@ h6.border-bottom {
     margin-bottom: 1rem;
 }
 
-button {
+form button {
     min-width: 80px;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
@@ -46,11 +46,15 @@ form > div > label {
     margin-bottom: 0.2rem;
 }
 
-.users-table tr:hover {
+.users-table tr.user:hover {
     cursor: pointer;
 }
 
 .error .table, .users-table {
+    margin-bottom: 0;
+}
+
+.alert {
     margin-bottom: 0;
 }
 

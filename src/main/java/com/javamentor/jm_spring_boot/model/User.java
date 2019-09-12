@@ -1,7 +1,5 @@
 package com.javamentor.jm_spring_boot.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 @Table(name = "users")
 public class User implements UserDetails, CredentialsContainer {
 
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
+//    private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     @Id
     @Column(name = "id")
@@ -181,11 +179,7 @@ public class User implements UserDetails, CredentialsContainer {
         if (roles == null) {
             return Collections.emptySortedSet();
         }
-        Collection<GrantedAuthority> authorities = roles.stream().map(role -> (GrantedAuthority) () -> "ROLE_" + role)
-                .collect(Collectors.toSet());
-        logger.debug("Username: {} Authorities: {}", username,
-                authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
-        return authorities;
+        return roles.stream().map(role -> (GrantedAuthority) () -> "ROLE_" + role).collect(Collectors.toSet());
     }
 
     public String getFirstName() {
