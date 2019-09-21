@@ -19,15 +19,16 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex)
             throws IOException, ServletException {
-        String redirectUrl;
         logger.debug("AccessDeniedException: {}", ex.getMessage());
         request.getSession().setAttribute("error", ex.getMessage());
-        if (request.getRequestURI().contains("/api/") || request.getHeader("Referer") == null) {
-            redirectUrl = "/";
+        if (request.getRequestURI().contains("/api/") || request.getHeader("Content-Type").contains("application/json")) {
+            response.setContentType("application/json");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        } else if (request.getHeader("Referer") == null) {
+            response.sendRedirect("/");
         } else {
-            redirectUrl = request.getHeader("Referer");
+            response.sendRedirect(request.getHeader("Referer"));
         }
-        response.sendRedirect(redirectUrl);
     }
 
 }
