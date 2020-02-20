@@ -1,2 +1,2 @@
 # jm-spring-boot
-Java Mentor Spring Boot
+Spring Boot Security Web App Template

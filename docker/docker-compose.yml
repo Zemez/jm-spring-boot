@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: jm_sb_db
+    image: $PG_IMAGE
+    restart: always
+    environment:
+      - POSTGRES_USER=$PG_USER
+      - POSTGRES_PASSWORD=$PG_PASS
+      - POSTGRES_DB=$PG_DB
+      - SCHEMA=$PG_SCHEMA
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge

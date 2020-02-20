@@ -35,3 +35,8 @@ application.properties
 
 ### tmp ###
 .cp.tmp
+
+### Maven wrapper ##
+.mvn/
+mvnw
+mvnw.cmd
